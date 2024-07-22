@@ -260,4 +260,11 @@ public class UserServiceImpl implements UserService {
         user.getMentalWorkouts().add(mentalWorkout);
         userRepository.save(user);
     }
+
+    @Override
+    @Transactional(propagation = Propagation.MANDATORY)
+    public void deleteMentalWorkoutFromUser(User user, MentalWorkout mentalWorkout) {
+        if (user.getMentalWorkouts() != null) user.getMentalWorkouts().remove(mentalWorkout);
+        userRepository.save(user);
+    }
 }

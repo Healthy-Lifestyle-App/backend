@@ -175,4 +175,22 @@ public class MentalWorkoutServiceImpl implements MentalWorkoutService {
                 entitiesPage.map(entity -> modelMapper.map(entity, MentalWorkoutResponseDto.class));
         return dtoPage;
     }
+
+    @Override
+    @Transactional
+    public void deleteCustomMentalWorkout(long userId, long mentalWorkoutId) {
+        MentalWorkout mentalWorkout = mentalWorkoutRepository
+                .findById(mentalWorkoutId)
+                .orElseThrow(() ->
+                        new ApiException(ErrorMessage.MENTAL_WORKOUT_NOT_FOUND, mentalWorkoutId, HttpStatus.NOT_FOUND));
+        if (!mentalWorkout.isCustom())
+            throw new ApiException(
+                    ErrorMessage.DEFAULT_RESOURCE_HAS_BEEN_REQUESTED_INSTEAD_OF_CUSTOM, null, HttpStatus.BAD_REQUEST);
+
+        if (userId != mentalWorkout.getUser().getId())
+            throw new ApiException(ErrorMessage.USER_MENTAL_WORKOUT_MISMATCH, mentalWorkoutId, HttpStatus.BAD_REQUEST);
+        User user = userService.getUserById(userId);
+        userService.deleteMentalWorkoutFromUser(user, mentalWorkout);
+        mentalWorkoutRepository.delete(mentalWorkout);
+    }
 }

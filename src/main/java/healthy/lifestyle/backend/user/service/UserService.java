@@ -32,4 +32,6 @@ public interface UserService {
     void addMentalActivitiesToUser(long userId, MentalActivity mental);
 
     void addMentalWorkoutToUser(User user, MentalWorkout mentalWorkout);
+
+    void deleteMentalWorkoutFromUser(User user, MentalWorkout mentalWorkout);
 }

@@ -20,4 +20,6 @@ public interface MentalWorkoutService {
             String sortDirection,
             int currentPageNumber,
             int pageSize);
+
+    void deleteCustomMentalWorkout(long userId, long mentalWorkoutId);
 }
